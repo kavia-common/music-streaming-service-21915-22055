@@ -1,0 +1,4 @@
+{
+    "command": "pytest",
+    "working_directory": "/home/kavia/workspace/code-generation/music-streaming-service-21915-22055/BackendAPI"
+}
