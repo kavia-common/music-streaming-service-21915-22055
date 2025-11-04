@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.core.config import get_settings
 from src.api.routes.auth import router as auth_router
 from src.api.routes.users import router as users_router
+from src.api.routes.playlists import router as playlists_router
 
 settings = get_settings()
 
@@ -53,3 +54,4 @@ def health_check():
 # Include routers
 app.include_router(auth_router)
 app.include_router(users_router)
+app.include_router(playlists_router)
