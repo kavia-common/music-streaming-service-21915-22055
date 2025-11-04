@@ -42,7 +42,9 @@ class Settings(BaseSettings):
 
     # Observability / Logging related environment variables
     OBS_ENABLED: bool = Field(default=True, description="Enable observability/log forwarding")
-    OBS_ENDPOINT: Optional[str] = Field(default=None, description="Observability endpoint")
+    # Support both OBS_BASE_URL (preferred) and OBS_ENDPOINT (legacy)
+    OBS_BASE_URL: Optional[str] = Field(default=None, description="Observability service base URL (e.g., http://monitoring:8000)")
+    OBS_ENDPOINT: Optional[str] = Field(default=None, description="Legacy env var for observability endpoint (fallback to OBS_BASE_URL)")
     OBS_API_KEY: Optional[str] = Field(default=None, description="Observability service API key")
     OBS_SERVICE_NAME: str = Field(default="backend-api", description="Service name for tracing/logs")
     OBS_ENVIRONMENT: str = Field(default="development", description="Deployment environment")
@@ -69,8 +71,17 @@ class Settings(BaseSettings):
 # PUBLIC_INTERFACE
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    """Get the singleton Settings instance, with CORS origins normalized."""
+    """Get the singleton Settings instance, with CORS origins normalized and observability normalized."""
     settings = Settings()  # type: ignore[call-arg]
     # Normalize CORS origins into list[str]
     settings.CORS_ORIGINS = Settings.parse_cors_origins(settings.CORS_ORIGINS)  # type: ignore[assignment]
+
+    # Normalize observability base URL: prefer OBS_BASE_URL if provided
+    try:
+        if getattr(settings, "OBS_BASE_URL", None) and not getattr(settings, "OBS_ENDPOINT", None):
+            settings.OBS_ENDPOINT = settings.OBS_BASE_URL  # type: ignore[attr-defined]
+    except Exception:
+        # Do not fail on any error
+        pass
+
     return settings

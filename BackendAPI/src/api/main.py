@@ -9,6 +9,7 @@ from src.api.routes.catalog import router as catalog_router
 from src.api.routes.recommendations import router as recommendations_router
 from src.api.routes.streaming import router as streaming_router
 from src.api.routes.admin import router as admin_router
+from src.middleware.observability import ObservabilityMiddleware
 
 settings = get_settings()
 
@@ -40,6 +41,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Conditionally add observability middleware
+if settings.OBS_ENABLED:
+    app.add_middleware(ObservabilityMiddleware)
 
 
 @app.get(
