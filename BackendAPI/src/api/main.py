@@ -6,6 +6,7 @@ from src.api.routes.auth import router as auth_router
 from src.api.routes.users import router as users_router
 from src.api.routes.playlists import router as playlists_router
 from src.api.routes.catalog import router as catalog_router
+from src.api.routes.recommendations import router as recommendations_router
 
 settings = get_settings()
 
@@ -57,3 +58,4 @@ app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(playlists_router)
 app.include_router(catalog_router)
+app.include_router(recommendations_router)
