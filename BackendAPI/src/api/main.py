@@ -8,6 +8,7 @@ from src.api.routes.playlists import router as playlists_router
 from src.api.routes.catalog import router as catalog_router
 from src.api.routes.recommendations import router as recommendations_router
 from src.api.routes.streaming import router as streaming_router
+from src.api.routes.admin import router as admin_router
 
 settings = get_settings()
 
@@ -62,3 +63,4 @@ app.include_router(playlists_router)
 app.include_router(catalog_router)
 app.include_router(recommendations_router)
 app.include_router(streaming_router)
+app.include_router(admin_router)
