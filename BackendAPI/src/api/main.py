@@ -7,6 +7,7 @@ from src.api.routes.users import router as users_router
 from src.api.routes.playlists import router as playlists_router
 from src.api.routes.catalog import router as catalog_router
 from src.api.routes.recommendations import router as recommendations_router
+from src.api.routes.streaming import router as streaming_router
 
 settings = get_settings()
 
@@ -15,6 +16,7 @@ openapi_tags = [
     {"name": "Auth", "description": "User authentication and profile management."},
     {"name": "Playlists", "description": "Playlist management APIs."},
     {"name": "Catalog", "description": "Music catalog browsing and search."},
+    {"name": "Streaming", "description": "Stream session orchestration (start/stop)."},
     {"name": "Admin", "description": "Administrative operations and audit."},
 ]
 
@@ -59,3 +61,4 @@ app.include_router(users_router)
 app.include_router(playlists_router)
 app.include_router(catalog_router)
 app.include_router(recommendations_router)
+app.include_router(streaming_router)
