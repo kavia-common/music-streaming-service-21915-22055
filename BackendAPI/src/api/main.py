@@ -13,6 +13,7 @@ from src.middleware.observability import ObservabilityMiddleware
 
 settings = get_settings()
 
+# Define OpenAPI tags for grouping
 openapi_tags = [
     {"name": "Health", "description": "Service health and readiness."},
     {"name": "Auth", "description": "User authentication and profile management."},
@@ -22,6 +23,7 @@ openapi_tags = [
     {"name": "Admin", "description": "Administrative operations and audit."},
 ]
 
+# Initialize FastAPI app with metadata for OpenAPI/Swagger
 app = FastAPI(
     title="Music Streaming Backend API",
     description="RESTful API for music streaming platform backend services.",
@@ -34,6 +36,7 @@ app = FastAPI(
     openapi_tags=openapi_tags,
 )
 
+# Apply CORS policy from configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS if settings.CORS_ORIGINS else ["*"],
@@ -42,7 +45,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Conditionally add observability middleware
+# Conditionally enable observability middleware
 if settings.OBS_ENABLED:
     app.add_middleware(ObservabilityMiddleware)
 
@@ -50,18 +53,19 @@ if settings.OBS_ENABLED:
 @app.get(
     "/",
     summary="Health Check",
+    description="Health check endpoint for liveness probes.\n\nReturns a simple JSON indicating the service is healthy.",
     tags=["Health"],
     responses={200: {"description": "Service is healthy"}},
 )
 def health_check():
-    """Health check endpoint for liveness probes.
+    """Root health endpoint.
 
-    Returns a simple JSON indicating the service is healthy.
+    Returns:
+    - JSON message confirming service health.
     """
     return {"message": "Healthy"}
 
-
-# Include routers
+# Mount all routers
 app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(playlists_router)
