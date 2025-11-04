@@ -5,6 +5,14 @@ from src.core.config import get_settings
 
 settings = get_settings()
 
+openapi_tags = [
+    {"name": "Health", "description": "Service health and readiness."},
+    {"name": "Auth", "description": "User authentication and profile management."},
+    {"name": "Playlists", "description": "Playlist management APIs."},
+    {"name": "Catalog", "description": "Music catalog browsing and search."},
+    {"name": "Admin", "description": "Administrative operations and audit."},
+]
+
 app = FastAPI(
     title="Music Streaming Backend API",
     description="RESTful API for music streaming platform backend services.",
@@ -14,6 +22,7 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url="/openapi.json",
+    openapi_tags=openapi_tags,
 )
 
 app.add_middleware(
@@ -23,6 +32,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.get(
     "/",
